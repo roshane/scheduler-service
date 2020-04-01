@@ -1,9 +1,9 @@
 package com.aeon.scheduler.service.controller;
 
+import com.aeon.scheduler.service.AbstractBaseItTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
@@ -11,9 +11,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 @AutoConfigureMockMvc
-class SystemControllerItTest {
+class SystemControllerItTest extends AbstractBaseItTest {
 
     @Test
     void test_health_should_return_200ok(@Autowired MockMvc mvc) throws Exception {
