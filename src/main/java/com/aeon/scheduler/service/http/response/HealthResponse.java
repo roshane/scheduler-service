@@ -1,4 +1,4 @@
-package com.aeon.scheduler.service.response;
+package com.aeon.scheduler.service.http.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,7 @@ public class HealthResponse {
     private String timeStamp;
     private String version;
     private String status;
+    private String activeProfile;
 
     public String toResponseString() {
         return new StringBuilder()
@@ -19,6 +20,8 @@ public class HealthResponse {
                 .append("version: ").append(this.version)
                 .append("\n")
                 .append("timestamp: ").append(this.timeStamp)
+                .append("\n")
+                .append("activeProfile: ").append(this.activeProfile)
                 .toString();
 
     }

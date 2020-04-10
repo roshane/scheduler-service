@@ -39,7 +39,7 @@ public class CommandUtil {
             if (process.exitValue() != 0) {
                 return empty;
             }
-            return Optional.of(converter.apply(asString(process.getInputStream())));
+            return Optional.of(converter.apply(readAllBytes(process.getInputStream())));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class CommandUtil {
         }
     }
 
-    private static String asString(InputStream inputStream) throws IOException {
+    private static String readAllBytes(InputStream inputStream) throws IOException {
         try {
             byte[] byteArray = new byte[inputStream.available()];
             int count = 0;

@@ -1,6 +1,6 @@
-package com.aeon.scheduler.service.controller;
+package com.aeon.scheduler.service.it.controller;
 
-import com.aeon.scheduler.service.AbstractBaseItTest;
+import com.aeon.scheduler.service.it.AbstractBase_ItTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-class SystemControllerItTest extends AbstractBaseItTest {
+class SystemController_ItTest extends AbstractBase_ItTest {
 
     @Test
     void test_health_should_return_200ok(@Autowired MockMvc mvc) throws Exception {

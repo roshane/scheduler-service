@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SystemController {
     private final HealthService healthService;
 
-    SystemController(HealthService healthService) {
+    public SystemController(HealthService healthService) {
         this.healthService = healthService;
     }
 
