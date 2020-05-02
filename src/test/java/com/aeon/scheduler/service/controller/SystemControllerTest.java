@@ -1,9 +1,8 @@
-package com.aeon.scheduler.service.unit.controller;
+package com.aeon.scheduler.service.controller;
 
-import com.aeon.scheduler.service.controller.SystemController;
 import com.aeon.scheduler.service.http.response.HealthResponse;
 import com.aeon.scheduler.service.service.HealthService;
-import com.aeon.scheduler.service.unit.AbstractBaseUnitTest;
+import com.aeon.scheduler.service.AbstractBaseUnitTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

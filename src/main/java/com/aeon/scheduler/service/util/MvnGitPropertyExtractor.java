@@ -1,8 +1,5 @@
 package com.aeon.scheduler.service.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,6 +7,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MvnGitPropertyExtractor {
     private static final Logger logger = LoggerFactory.getLogger(MvnGitPropertyExtractor.class);
@@ -31,7 +31,8 @@ public class MvnGitPropertyExtractor {
         deleteFileIfExists(path);
         try {
             Path newPath = Files.createFile(path);
-            String propertyLines = properties.entrySet().stream().map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue()))
+            String propertyLines = properties.entrySet().stream()
+                    .map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue()))
                     .reduce("", (prev, current) -> prev + current + "\n");
             Files.write(newPath, propertyLines.getBytes(), StandardOpenOption.WRITE);
             logger.info("Created [{}]", gitPropertyFileName);

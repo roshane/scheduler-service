@@ -1,0 +1,90 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'checkstyle'
+
+}
+
+group = 'com.aeon'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    intTestImplemntation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+task intTest(type: Test) {
+    group = "verification"
+    description = "Runs integration tests"
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    shouldRunAfter classes
+}
+
+task initGitProperties(type: JavaExec) {
+    group = "Custom"
+    description = "Create [git.properties]"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.aeon.scheduler.service.util.MvnGitPropertyExtractor'
+    args sourceSets.main.output.resourcesDir.toPath().toString()
+    shouldRunAfter classes
+}
+
+checkstyle {
+    toolVersion = "8.32"
+    configFile = file("$project.rootDir/config/check_style.xml")
+    showViolations = true
+    ignoreFailures = false
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    //TODO should extend not working
+    intTestImplementation 'org.springframework.boot:spring-boot-starter'
+    intTestImplementation 'org.springframework.boot:spring-boot-starter-web'
+    intTestImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging{
+        showStandardStreams = true
+    }
+}
+
+intTest{
+    useJUnitPlatform()
+    testLogging{
+        showStandardStreams = true
+    }
+}
+
+intTest.dependsOn classes, initGitProperties
