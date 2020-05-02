@@ -15,4 +15,5 @@ cache:
     - $HOME/.gradle/wrapper/
 
 script:
+  - chmod +x ./gradlew
   - ./gradlew checkstyleMain test intTest
