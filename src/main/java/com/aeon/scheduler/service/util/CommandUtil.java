@@ -23,7 +23,8 @@ public class CommandUtil {
 
     public static Optional<LocalDateTime> getLatestCommitTime() {
         return executeSysCommand(GitCommands.LATEST_COMMIT_DATE, s -> LocalDateTime
-                .ofEpochSecond(Long.parseLong(s), 0, ZoneOffset.systemDefault().getRules().getStandardOffset(Instant.now()))
+                .ofEpochSecond(Long.parseLong(s), 0,
+                        ZoneOffset.systemDefault().getRules().getStandardOffset(Instant.now()))
         );
     }
 
