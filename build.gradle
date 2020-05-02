@@ -40,8 +40,18 @@ task initGitProperties(type: JavaExec) {
     description = "Create [git.properties]"
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.aeon.scheduler.service.util.MvnGitPropertyExtractor'
-    args sourceSets.main.output.resourcesDir.toPath().toString()
-    shouldRunAfter classes
+    args sourceSets.main.output.resourcesDir.toString()
+    shouldRunAfter(classes)
+}
+
+task hello {
+    doLast {
+        println(sourceSets.main.output.resourcesDir.toString())
+    }
+}
+intTest.dependsOn(initGitProperties)
+build {
+    dependsOn(check, test, intTest)
 }
 
 checkstyle {
@@ -75,16 +85,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    testLogging{
+    testLogging {
         showStandardStreams = true
     }
 }
 
-intTest{
+intTest {
     useJUnitPlatform()
-    testLogging{
+    testLogging {
         showStandardStreams = true
     }
 }
-
-intTest.dependsOn classes, initGitProperties
