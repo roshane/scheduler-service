@@ -9,27 +9,39 @@ plugins {
 group = 'com.aeon'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 repositories {
     mavenCentral()
 }
 
-tasks.register('initGitProperties') {
-    group = "Custom"
-    description = "Create [git.properties]"
-    doLast {
-        println("Creating git.properties")
+sourceSets {
+    intTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
     }
 }
 
-tasks.register("listPlugins") {
+configurations {
+    intTestImplemntation.extendsFrom implementation
+    intTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+task intTest(type: Test) {
+    group = "verification"
+    description = "Runs integration tests"
+    testClassesDirs = sourceSets.intTest.output.classesDirs
+    classpath = sourceSets.intTest.runtimeClasspath
+    shouldRunAfter classes
+}
+
+task initGitProperties(type: JavaExec) {
     group = "Custom"
-    description = "List project plugins"
-    doLast {
-        project.plugins.each {
-            println(it)
-        }
-    }
+    description = "Create [git.properties]"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.aeon.scheduler.service.util.MvnGitPropertyExtractor'
+    args sourceSets.main.output.resourcesDir.toPath().toString()
+    shouldRunAfter classes
 }
 
 checkstyle {
@@ -52,10 +64,24 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    //TODO should extend not working
+    intTestImplementation 'org.springframework.boot:spring-boot-starter'
+    intTestImplementation 'org.springframework.boot:spring-boot-starter-web'
+    intTestImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 }
 
 test {
     useJUnitPlatform()
+    testLogging{
+        showStandardStreams = true
+    }
 }
 
-test.mustRunAfter initGitProperties
+intTest{
+    useJUnitPlatform()
+}
+
+intTest.dependsOn classes, initGitProperties
