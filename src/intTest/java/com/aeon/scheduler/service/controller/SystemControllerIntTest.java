@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class SystemControllerIntTest extends AbstractBaseIntTest {
 
     @Test
-    void test_health_should_return_200ok(@Autowired MockMvc mvc) throws Exception {
+    void test_health_should_return_200_Ok(@Autowired MockMvc mvc) throws Exception {
         mvc.perform(get("/health")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("healthy")));
     }
