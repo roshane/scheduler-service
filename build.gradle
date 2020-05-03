@@ -64,6 +64,7 @@ checkstyle {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -81,18 +82,19 @@ dependencies {
     intTestImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    intTestImplementation 'net.logstash.logback:logstash-logback-encoder:6.3'
 }
 
 test {
     useJUnitPlatform()
     testLogging {
-        showStandardStreams = true
+        showStandardStreams = false
     }
 }
 
 intTest {
     useJUnitPlatform()
     testLogging {
-        showStandardStreams = true
+        showStandardStreams = false
     }
 }

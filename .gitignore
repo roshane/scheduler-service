@@ -35,3 +35,4 @@ git.properties
 
 ### gradle ###
 .gradle
+logs
