@@ -20,7 +20,6 @@ public class MvnGitPropertyExtractor {
             logger.error("File path not give for [{}] hence skipping", gitPropertyFileName);
         }
         final Path filePath = Paths.get(args[0], gitPropertyFileName);
-        logger.debug("File path given [{}]", filePath.toString());
         final Map<String, String> properties = new HashMap<>();
         properties.put("last.commit", CommandUtil.getLatestCommitHash().orElse("na"));
         properties.put("last.timestamp", CommandUtil.getLatestCommitTimeAsString().orElse("na"));
