@@ -20,7 +20,7 @@ class SystemControllerTest extends AbstractBaseUnitTest {
 
     @Test
     @DisplayName("/health should return 200 Ok")
-    void test_system_controller_returns_200ok() throws Exception {
+    void test_system_controller_returns_200ok() {
         String fakeTimestamp = "2020-04-04T21:18:14";
         HealthResponse fakeResponse = new HealthResponse(fakeTimestamp, "1.0.0", "healthy", activeProfile);
         Mockito.when(mockHealthService.getHealth()).thenReturn(fakeResponse);

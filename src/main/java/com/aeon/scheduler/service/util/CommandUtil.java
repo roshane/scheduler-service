@@ -12,7 +12,7 @@ import java.util.function.Function;
 public class CommandUtil {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private abstract class GitCommands {
+    private static abstract class GitCommands {
         private static final String LATEST_COMMIT_HASH = "git log -n1 --pretty=format:\"%H\"";
         private static final String LATEST_COMMIT_DATE = " git log -n1 --pretty=format:\"%ad\" --date=unix";
     }

@@ -53,6 +53,13 @@ intTest.dependsOn(initGitProperties)
 build {
     dependsOn(check, test, intTest)
 }
+bootRun{
+    dependsOn(initGitProperties)
+}
+
+//springBoot{
+//    buildInfo()
+//}
 
 checkstyle {
     toolVersion = "8.32"
@@ -64,7 +71,10 @@ checkstyle {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
     implementation 'net.logstash.logback:logstash-logback-encoder:6.3'
+    implementation 'org.postgresql:postgresql:42.2.12'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -79,10 +89,17 @@ dependencies {
     //TODO should extend not working
     intTestImplementation 'org.springframework.boot:spring-boot-starter'
     intTestImplementation 'org.springframework.boot:spring-boot-starter-web'
+    intTestImplementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    intTestImplementation 'org.springframework.boot:spring-boot-starter-quartz'
     intTestImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     intTestImplementation 'net.logstash.logback:logstash-logback-encoder:6.3'
+    intTestImplementation 'org.postgresql:postgresql:42.2.12'
+    intTest {
+        intTestImplementation "org.testcontainers:postgresql:1.12.1"
+    }
+
 }
 
 test {
@@ -95,6 +112,6 @@ test {
 intTest {
     useJUnitPlatform()
     testLogging {
-        showStandardStreams = false
+        showStandardStreams = true
     }
 }
