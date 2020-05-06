@@ -24,17 +24,18 @@ public class PostgresContainerExecutionListener extends AbstractTestExecutionLis
 //        final String password = Objects.requireNonNull(env.getProperty("postgres.db.password"));
 //        final String dbname = Objects.requireNonNull(env.getProperty("postgres.db.name"));
         final int port = 5432;
+        final int hostPort = 5433;
         final String user = "postgres";
         final String password = "password";
         final String dbname = "scheduler_service";
-        final String jdbcUrl = "jdbc:postgresql://localhost:" + port + "/" + dbname;
+        final String jdbcUrl = "jdbc:postgresql://localhost:" + hostPort + "/" + dbname;
 
         pgContainer = new PostgreSQLContainer<>(CONTAINER_NAME)
                 .withExposedPorts(port)
                 .withPassword(password)
                 .withUsername(user)
                 .withDatabaseName(dbname);
-        pgContainer.setPortBindings(Collections.singletonList(port + ":" + port));
+        pgContainer.setPortBindings(Collections.singletonList(hostPort + ":" + port));
         pgContainer.setWaitStrategy(new PostgresContainerWaitStrategy(user, password, jdbcUrl).withStartupTimeout(Duration.of(10, ChronoUnit.SECONDS)));
         pgContainer.start();
         logger.info("postgres container ready");
