@@ -18,17 +18,12 @@ public class PostgresContainerExecutionListener extends AbstractTestExecutionLis
 
     @Override
     public void beforeTestExecution(TestContext testContext) throws Exception {
-//        Environment env = testContext.getApplicationContext().getEnvironment();
-//        final int port = Objects.requireNonNull(env.getProperty("postgres.db.port", Integer.class));
-//        final String user = Objects.requireNonNull(env.getProperty("postgres.db.user"));
-//        final String password = Objects.requireNonNull(env.getProperty("postgres.db.password"));
-//        final String dbname = Objects.requireNonNull(env.getProperty("postgres.db.name"));
         final int port = 5432;
         final int hostPort = 5433;
         final String user = "postgres";
         final String password = "password";
         final String dbname = "scheduler_service";
-        final String jdbcUrl = "jdbc:postgresql://localhost:" + hostPort + "/" + dbname;
+        final String jdbcUrl = String.format("jdbc:postgresql://localhost:%d/%s", hostPort, dbname);
 
         pgContainer = new PostgreSQLContainer<>(CONTAINER_NAME)
                 .withExposedPorts(port)
@@ -44,8 +39,8 @@ public class PostgresContainerExecutionListener extends AbstractTestExecutionLis
 
     @Override
     public void afterTestExecution(TestContext testContext) throws Exception {
-        super.afterTestExecution(testContext);
         pgContainer.stop();
         logger.info("postgres container stopped");
+        super.afterTestExecution(testContext);
     }
 }
