@@ -1,3 +1,8 @@
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+
 plugins {
     id 'org.springframework.boot' version '2.2.6.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
@@ -44,22 +49,72 @@ task initGitProperties(type: JavaExec) {
     shouldRunAfter(classes)
 }
 
-task hello {
-    doLast {
-        println(sourceSets.main.output.resourcesDir.toString())
-    }
+task extractFatJar(type: Exec) {
+    String jarOutputDir = Paths.get(buildDir.toString(), "libs")
+    String fatJarName = String.format("%s-%s.jar", rootDir.name, version.toString())
+    String fatJarPath = Paths.get(jarOutputDir, fatJarName)
+
+    Path extPath = Paths.get(buildDir.toString(), "ext")
+    Path resultPath = Files.createDirectories(extPath)
+    workingDir = extPath
+    String jarXvf = String.format("jar -xvf %s", fatJarPath.toString())
+    commandLine 'cmd', '/c', jarXvf
 }
-intTest.dependsOn(initGitProperties)
+
+task buildDockerImage(type: Exec) {
+    group = "Custom"
+    String dockerTag = String.format("%s:%s", rootDir.name, version.toString()).toLowerCase()
+    description = String.format("Build docker image current[%s]", dockerTag)
+    Path extPath = rootDir.toPath().resolve(Paths.get("build", "ext"))
+    String dockerExec = String.format("docker build --build-arg DEPENDENCY=%s -t %s .", extPath.toString(), dockerTag)
+    Path sourceDockerFile = rootDir.toPath().resolve("Dockerfile")
+    try {
+        Files.copy(sourceDockerFile, extPath.resolve(sourceDockerFile.getFileName()), StandardCopyOption.REPLACE_EXISTING)
+    } catch (IOException ex) {
+        ex.printStackTrace()
+        throw ex //to break execution
+    }
+    workingDir = Paths.get("build", "ext").toString()
+    commandLine 'cmd', '/c', dockerExec
+}
+
+//task hello {
+//    doLast {
+//        String jarOutputDir = Paths.get(buildDir.toString(), "libs")
+//        String fatJarName = String.format("%s-%s", rootDir.name, version.toString())
+//        println(jarOutputDir.toString() + "\n" + fatJarName)
+//        println(sourceSets.main.output.resourcesDir.toString())
+//        String dockerTag = String.format("%s:%s", rootDir.name, version.toString()).toLowerCase()
+//        String dockerExec = String.format("docker build --build-arg DEPENDENCY=%s -t %s .", "build/ext", dockerTag)
+//        Process process = Runtime.getRuntime().exec(dockerExec)
+//        //TODO this doesn't work process will wait indefinitely
+//        process.waitFor()
+//        if (process.exitValue() == 0) {
+//            println(dockerTag + " created successfully")
+//        }
+//    }
+//}
+
+
 build {
     dependsOn(check, test, intTest)
 }
-bootRun{
+
+bootRun {
     dependsOn(initGitProperties)
 }
 
-//springBoot{
-//    buildInfo()
-//}
+bootJar {
+    excludeDevtools = true
+    dependsOn(initGitProperties)
+}
+
+springBoot {
+    buildInfo()
+}
+
+intTest.dependsOn(initGitProperties)
+buildDockerImage.dependsOn(bootJar, extractFatJar)
 
 checkstyle {
     toolVersion = "8.32"
