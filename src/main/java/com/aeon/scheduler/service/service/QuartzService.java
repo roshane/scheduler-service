@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class QuartzService {
     private final Logger logger = LoggerFactory.getLogger(QuartzService.class);
     private final Scheduler scheduler;
-    private final Random random = new Random(System.currentTimeMillis());
 
     public QuartzService(Scheduler scheduler) {
         this.scheduler = scheduler;
