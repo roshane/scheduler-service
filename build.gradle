@@ -37,6 +37,7 @@ task intTest(type: Test) {
     description = "Runs integration tests"
     testClassesDirs = sourceSets.intTest.output.classesDirs
     classpath = sourceSets.intTest.runtimeClasspath
+    environment("spring.profiles.active","test")
     shouldRunAfter classes
 }
 

@@ -48,8 +48,7 @@ public class AppConfig {
     }
 
 
-
-    @Profile("dev")
+    @Profile({"dev", "test"})
     @Bean(name = "datasource")
     public DataSource devDatasource() {
         return new DriverManagerDataSource(getPostgresUrl(), postgresUser, postgresPassword);
