@@ -7,10 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LoggingJob implements Job {
-    private final Logger logger= LoggerFactory.getLogger(LoggingJob.class);
+    private final Logger logger = LoggerFactory.getLogger(LoggingJob.class);
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        logger.info("executing tasks {}",context.getJobDetail());
+        logger.info("executing tasks {}", context.getJobDetail());
     }
 }

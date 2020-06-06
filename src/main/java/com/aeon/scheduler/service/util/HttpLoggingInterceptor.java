@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * This interceptor is intended for use in sync context only, MDC propogation will break if used in async controllers
+ */
 public final class HttpLoggingInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(HttpLoggingInterceptor.class);
 

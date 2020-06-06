@@ -7,6 +7,5 @@ import org.springframework.beans.factory.annotation.Value;
 @Tag("UnitTest")
 @Timeout(value = 1)
 public abstract class AbstractBaseUnitTest {
-    @Value("${spring.profiles.active}")
-    protected String activeProfile;
+    protected String fakeActiveProfile = "dev";
 }
