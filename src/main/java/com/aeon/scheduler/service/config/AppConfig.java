@@ -1,8 +1,16 @@
 package com.aeon.scheduler.service.config;
 
+import javax.sql.DataSource;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
 @PropertySource("classpath:git.properties")
@@ -16,20 +24,33 @@ public class AppConfig {
     private String postgresUser;
     @Value("${postgres.db.password}")
     private String postgresPassword;
+    @Value("${postgres.db.name}")
+    private String postgresDbName;
 
-    public String getPostgresHost() {
-        return postgresHost;
+    private String getPostgresUrl() {
+        return String.format("jdbc:postgresql://%s:%d/%s", postgresHost, postgresPort, postgresDbName);
     }
 
-    public int getPostgresPort() {
-        return postgresPort;
+    @Profile("prod")
+    @Bean(name = "datasource")
+    public DataSource defaultDatasource() {
+        final HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(getPostgresUrl());
+        hikariConfig.setUsername(postgresUser);
+        hikariConfig.setPassword(postgresPassword);
+        return new HikariDataSource(hikariConfig);
     }
 
-    public String getPostgresUser() {
-        return postgresUser;
+
+    @Profile({"dev", "test"})
+    @Bean(name = "datasource")
+    public DataSource devDatasource() {
+        return new DriverManagerDataSource(getPostgresUrl(), postgresUser, postgresPassword);
     }
 
-    public String getPostgresPassword() {
-        return postgresPassword;
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
+
 }

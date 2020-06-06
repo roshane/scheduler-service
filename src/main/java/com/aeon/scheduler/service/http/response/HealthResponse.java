@@ -8,10 +8,10 @@ import lombok.ToString;
 @ToString
 @Getter
 public class HealthResponse {
-    private String timeStamp;
-    private String version;
-    private String status;
-    private String activeProfile;
+    private final String timeStamp;
+    private final String version;
+    private final String status;
+    private final String activeProfile;
 
     public String toResponseString() {
         return new StringBuilder()
